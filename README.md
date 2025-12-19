@@ -104,6 +104,5 @@ Testbenches
 
 Validate simulation behavior
 
-Define “realistic enough”
 
 ⚠️ No hiring yet — contributors only.
