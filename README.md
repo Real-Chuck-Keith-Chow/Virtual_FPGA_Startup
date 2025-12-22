@@ -106,3 +106,30 @@ Validate simulation behavior
 
 
 ⚠️ No hiring yet — contributors only.
+
+
+
+
+# Virtual FPGA – Phase 1 Simulation Core
+
+This project provides a reproducible, sandboxed Verilog simulation environment.
+
+## What this is
+- Run Verilog + testbench automatically
+- No local iverilog install required
+- Deterministic Docker-based execution
+- Output is a VCD waveform or clear error
+
+## What this is NOT
+- No FPGA synthesis
+- No vendor tools
+- No GUI
+- No 3D visualization (yet)
+
+## Requirements
+- Docker Desktop
+
+## Build
+```bash
+docker build -t virtual-fpga-sim ./runner
+
