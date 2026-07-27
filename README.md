@@ -1,135 +1,34 @@
-# Virtual_FPGA_Startup
+# FPGA LeetCode
 
-Core thesis: Modern hardware development should feel like modern software development. We’re building a cloud-based Verilog simulation and visualization platform, not an FPGA toolchain.
+Learn Verilog through coding challenges in your browser.
 
+## What is this?
 
-1️⃣ Locked Scope (NON-NEGOTIABLE)
-❌ We are NOT building
+A website where you solve Verilog coding problems, like LeetCode but for hardware design. Write code, run simulation, get instant feedback.
 
-❌ FPGA synthesis (no place & route)
+## Current Status
 
-❌ Vendor tools (no Xilinx / Intel / proprietary IP)
+**Early development.** Nothing working yet.
 
-❌ Custom Verilog compiler or interpreter
+## Planned Features
 
-❌ Cycle-accurate silicon / transistor models
+- Verilog code editor in the browser
+- Run simulation with one click
+- Waveform viewer for debugging
+- 30+ challenges (easy to hard)
+- Pass/fail test cases
 
-❌ Production-grade EDA replacement (yet)
+## Tech Stack (Tentative)
 
-✅ We ARE building
+- Frontend: React
+- Editor: Monaco
+- Simulation: Verilator → WASM
+- Styling: Tailwind CSS
 
-✅ Cloud-based Verilog simulation
+## Running Locally
 
-✅ Visualization of signal behavior
-
-✅ Browser-based dev environment
-
-✅ Virtual lab experience (educational + dev-focused)
-
-
-2️⃣ Technology Stack (DECIDED)
-Simulation
-
-Simulator: iverilog (Phase 1)
-
-Output format: VCD (Value Change Dump)
-
-Execution: Event-driven simulation (existing tools)
-
-Backend
-
-Language: Node.js or Python (keep simple)
-
-Sandbox: Docker (one container per run)
-
-API: REST (POST /simulate)
-
-Security: no network, time + memory limits
-
-Frontend
-
-Editor: Monaco (VS Code–like)
-
-Visualization:
-
-Phase 1: waveform viewer (2D)
-
-Phase 2+: circuit / FPGA visualization
-
-Framework: React (or similar)
-
-Cloud (later)
-
-Infra: single Linux VM
-
-Deploy: Docker Compose
-
-HTTPS: Caddy / Nginx
-
-3️⃣ Prototype Definition (VERY IMPORTANT)
-Phase 1 Prototype = SUCCESS if:
-
-User pastes Verilog + testbench
-
-Clicks Run
-
-Simulation executes in cloud
-
-Waveforms appear in browser
-
-Errors are shown clearly
-
-❌ No live interaction
-❌ No FPGA animation
-❌ No 3D
-
-4️⃣ Roles (FOR NOW)
-Founder / Product / Backend 
-
-API
-
-Docker runner
-
-Cloud deployment
-
-Product decisions
-
-UX flow
-
-Simulation / HDL Contributor
-
-Verilog examples
-
-Testbenches
-
-Validate simulation behavior
-
-
-⚠️ No hiring yet — contributors only.
-
-
-
-
-# Virtual FPGA – Phase 1 Simulation Core
-
-This project provides a reproducible, sandboxed Verilog simulation environment.
-
-## What this is
-- Run Verilog + testbench automatically
-- No local iverilog install required
-- Deterministic Docker-based execution
-- Output is a VCD waveform or clear error
-
-## What this is NOT
-- No FPGA synthesis
-- No vendor tools
-- No GUI
-- No 3D visualization (yet)
-
-## Requirements
-- Docker Desktop
-
-## Build
 ```bash
-docker build -t virtual-fpga-sim ./runner
-
+git clone https://github.com/yourusername/fpga-leetcode.git
+cd fpga-leetcode
+npm install
+npm run dev
