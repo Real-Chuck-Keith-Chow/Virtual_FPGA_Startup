@@ -1,0 +1,22 @@
+To run the website on your local browser:
+
+Setup (one-time):
+
+1.  Open the siliconprep folder in VSCode (File → Open Folder)
+2.  Click the Extensions icon in the left sidebar (or Ctrl+Shift+X / Cmd+Shift+X)
+3.  Search for "Live Server" (by Ritwick Dey) → click Install
+
+Running it:
+
+1.  Right-click index.html in the file explorer → Open with Live Server
+2. our browser opens automatically at something like http://127.0.0.1:5500/index.html
+3.  Edit any file, hit save — the browser tab refreshes on its own. No need to re-run anything.
+
+A "Go Live" button also appears in the bottom-right status bar of VSCode once it's installed — click it any time to start/stop the server.
+
+A couple of things specific to this project:
+
+-   To see the problems list or a problem page, just navigate to problems.html or problem.html in the browser (or right-click those files → Open with Live Server directly)
+-   problem.html needs internet access on first load — it pulls CodeMirror (the code editor) from a CDN, so the editor won't render if you're offline
+
+If you don't want to install anything: you can just double-click index.html in your file explorer to open it directly in a browser. That works fine for index.html and problems.html. The only downside is no auto-refresh — you'd hit refresh manually after every change, and depending on your browser, opening files with file:// links can occasionally be picky about local scripts (Live Server avoids that entirely by serving over http://), so Live Server is the more reliable option.

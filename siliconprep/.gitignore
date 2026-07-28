@@ -1,0 +1,28 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+
+# Environment / secrets
+.env
+.env.local
+*.pem
+
+# Node (if you add a backend later)
+node_modules/
+npm-debug.log*
+dist/
+build/
+
+# Python (if you add a backend later)
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Logs
+*.log

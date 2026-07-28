@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2-to-1 Multiplexer — SiliconPrep</title>
+<meta name="description" content="Practice problem: implement a 2-to-1 multiplexer in Verilog, SystemVerilog or VHDL, graded against a testbench.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230a0d0b'/%3E%3Cpath d='M3 15h3v-6h3v9h3v-12h3v9h3v-6h4' stroke='%23f2a94e' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="container">
+    <a href="index.html" class="brand">
+      <svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 15h3v-6h3v9h3v-12h3v9h3v-6h4"/></svg>
+      SiliconPrep
+    </a>
+    <div class="nav-links">
+      <a href="problems.html" class="active">Problems</a>
+      <a href="index.html#tracks">Tracks</a>
+      <a href="index.html#practice">Topics</a>
+    </div>
+    <div class="nav-actions">
+      <a href="#" class="btn btn-ghost btn-sm">Sign in</a>
+      <a href="problems.html" class="btn btn-primary btn-sm">Get started</a>
+    </div>
+    <button class="nav-menu-btn" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<div class="container">
+  <a href="problems.html" class="back-link">&larr; All problems</a>
+
+  <div class="problem-shell">
+    <div class="panel">
+      <div class="problem-meta">
+        <span class="pip easy">Easy</span>
+        <span style="font-family:var(--font-mono); font-size:12px; color:var(--text-muted)">01 · Combinational</span>
+      </div>
+      <h1>2-to-1 Multiplexer</h1>
+      <div class="problem-tags">
+        <span class="tag">Combinational</span>
+        <span class="tag">Verilog</span>
+        <span class="tag">SystemVerilog</span>
+        <span class="tag">VHDL</span>
+      </div>
+
+      <p>Implement a 2-to-1 multiplexer. When <code>sel</code> is low, the output <code>y</code> follows input <code>a</code>. When <code>sel</code> is high, <code>y</code> follows input <code>b</code>.</p>
+
+      <h3>Interface</h3>
+      <p><code>sel</code>, <code>a</code>, <code>b</code> — 1-bit inputs &nbsp;·&nbsp; <code>y</code> — 1-bit output</p>
+
+      <h3>Truth table</h3>
+      <table class="truth-table">
+        <thead><tr><th>sel</th><th>a</th><th>b</th><th>y</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+          <tr><td>0</td><td>1</td><td>1</td><td>1</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+          <tr><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Constraints</h3>
+      <p>Combinational only — no clock, no internal state. Any of <code>assign</code>, an <code>always_comb</code>/<code>always @(*)</code> block, or a VHDL concurrent statement is acceptable.</p>
+    </div>
+
+    <div class="panel editor-panel">
+      <div class="editor-toolbar">
+        <div class="lang-tabs">
+          <button class="lang-tab active" data-lang="verilog">Verilog</button>
+          <button class="lang-tab" data-lang="sv">SystemVerilog</button>
+          <button class="lang-tab" data-lang="vhdl">VHDL</button>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-ghost btn-sm" id="run-btn">Run</button>
+          <button class="btn btn-primary btn-sm" id="submit-btn">Submit</button>
+        </div>
+      </div>
+
+      <textarea id="code-editor"></textarea>
+
+      <div class="console-panel">
+        <div class="console-head">
+          <span>Console</span>
+          <span class="status-badge" id="run-status">Not run yet</span>
+        </div>
+        <div class="console-body" id="console-body"><span class="muted">Click Run to compile and simulate against the hidden testbench.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>SiliconPrep — a starter template. Rename it, brand it, make it yours.</p>
+    <div class="footer-links">
+      <a href="problems.html">Problems</a>
+      <a href="index.html#tracks">Tracks</a>
+      <a href="#">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/verilog/verilog.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/vhdl/vhdl.min.js"></script>
+<script src="main.js"></script>
+<script src="editor.js"></script>
+</body>
+</html>
