@@ -1,48 +1,69 @@
-// Thin wrapper around the FastAPI backend. Change this if your API runs
-// somewhere other than localhost:8000 (e.g. once you deploy it).
-const API_BASE_URL = "http://127.0.0.1:8000";
+// Local data layer — no server, no network calls. Everything here reads from
+// the PROBLEMS array in problems-data.js and resolves instantly.
+//
+// This deliberately keeps the exact same function names/return shapes a real
+// API client would have (fetchProblems, fetchTopics, fetchProblem,
+// submitCode), so reconnecting the FastAPI + SQL backend in /backend later —
+// once you build a real judge — just means rewriting the *insides* of these
+// functions back into fetch() calls. problems.js, editor.js, and the HTML
+// pages don't need to change at all.
 
-const LANG_LABEL = { verilog: "Verilog", sv: "SystemVerilog", vhdl: "VHDL" };
-
-async function apiGet(path) {
-  const res = await fetch(`${API_BASE_URL}${path}`);
-  if (!res.ok) throw new Error(`GET ${path} failed: ${res.status}`);
-  return res.json();
-}
-
-async function apiPost(path, body) {
-  const res = await fetch(`${API_BASE_URL}${path}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) throw new Error(`POST ${path} failed: ${res.status}`);
-  return res.json();
-}
+const TOOL = { verilog: "iverilog", sv: "verilator", vhdl: "ghdl" };
+const EXT = { verilog: "v", sv: "sv", vhdl: "vhd" };
 
 function fetchProblems({ search, language, topic, difficulty } = {}) {
-  const params = new URLSearchParams();
-  if (search) params.set("search", search);
-  if (language) params.set("language", language);
-  if (topic) params.set("topic", topic);
-  if (difficulty) params.set("difficulty", difficulty);
-  const qs = params.toString();
-  return apiGet(`/api/problems${qs ? `?${qs}` : ""}`);
+  let results = PROBLEMS;
+
+  if (search) {
+    const q = search.toLowerCase();
+    results = results.filter((p) => p.title.toLowerCase().includes(q));
+  }
+  if (language) results = results.filter((p) => p.languages.includes(language));
+  if (topic) results = results.filter((p) => p.topic === topic);
+  if (difficulty) results = results.filter((p) => p.difficulty === difficulty);
+
+  const shaped = results.map(
+    ({ id, slug, title, topic, difficulty, success_rate, languages }) => ({
+      id, slug, title, topic, difficulty, success_rate, languages,
+    })
+  );
+  return Promise.resolve(shaped);
 }
 
 function fetchTopics() {
-  return apiGet("/api/topics");
+  const topics = [...new Set(PROBLEMS.map((p) => p.topic))].sort();
+  return Promise.resolve(topics);
 }
 
 function fetchProblem(slug) {
-  return apiGet(`/api/problems/${slug}`);
+  const p = PROBLEMS.find((p) => p.slug === slug);
+  if (!p) return Promise.reject(new Error(`Problem not found: ${slug}`));
+  return Promise.resolve(p);
 }
 
+// MOCK JUDGE — runs entirely in the browser, doesn't actually compile or
+// simulate anything. Once you build a real backend judge, replace this
+// function's body with a real fetch() POST to /api/submissions.
 function submitCode({ problemId, language, code, isSubmit }) {
-  return apiPost("/api/submissions", {
-    problem_id: problemId,
-    language,
-    code,
-    is_submit: isSubmit,
+  const problem = PROBLEMS.find((p) => p.id === problemId);
+  const slug = problem ? problem.slug : "top";
+  const tool = TOOL[language] || "iverilog";
+  const ext = EXT[language] || "v";
+
+  const log = [
+    `$ ${tool} ${slug}.${ext} tb_${slug}.${ext}`,
+    `TESTBENCH: ${slug}`,
+    `  vector 0  [PASS]`,
+    `  vector 1  [PASS]`,
+    `  vector 2  [PASS]`,
+    `  vector 3  [PASS]`,
+    `4/4 test vectors passed`,
+    ``,
+    `// Mock output \u2014 running entirely in your browser, nothing was`,
+    `// actually compiled or simulated. See /backend for the real judge.`,
+  ].join("\n");
+
+  return new Promise((resolve) => {
+    setTimeout(() => resolve({ status: "passed", log, tool }), 500);
   });
 }

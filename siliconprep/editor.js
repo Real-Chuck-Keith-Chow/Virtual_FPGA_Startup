@@ -23,11 +23,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     currentProblem = await fetchProblem(slug);
   } catch (err) {
     console.error(err);
-    document.getElementById("problem-title").textContent = "Couldn't load problem";
+    document.getElementById("problem-title").textContent = "Problem not found";
     document.getElementById("problem-description").textContent =
-      `Couldn't reach the API at ${API_BASE_URL}. Is the backend running? ` +
-      `Start it with "uvicorn app.main:app --reload" from the backend folder, ` +
-      `and make sure you've run "python seed.py" at least once.`;
+      `Couldn't find a problem with slug "${slug}". Open problems.html and click ` +
+      `into one from the list, or check problems-data.js for the correct slug.`;
     return;
   }
 
@@ -108,7 +107,7 @@ async function runJudge(isSubmit) {
     badge.className = `status-badge ${result.status === "passed" ? "pass" : "fail"}`;
   } catch (err) {
     console.error(err);
-    consoleBody.innerHTML = `<span class="fail">Couldn't reach the API at ${API_BASE_URL}. Is the backend running?</span>`;
+    consoleBody.innerHTML = `<span class="fail">Something went wrong running the judge — check the browser console for details.</span>`;
     badge.textContent = "Error";
     badge.className = "status-badge fail";
   }

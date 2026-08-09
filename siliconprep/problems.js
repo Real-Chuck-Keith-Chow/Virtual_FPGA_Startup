@@ -41,8 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(err);
       countEl.textContent = "";
       rowsEl.innerHTML = `<tr><td colspan="6" style="padding:24px 18px; color:var(--text-muted)">
-        Couldn't reach the API at ${API_BASE_URL}. Is the backend running?
-        (<code>uvicorn app.main:app --reload</code> from the backend folder)
+        Something went wrong loading the problem list — check the browser console for details.
       </td></tr>`;
     }
   }
