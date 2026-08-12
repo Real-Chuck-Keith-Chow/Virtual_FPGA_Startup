@@ -41,7 +41,7 @@ const QUIZ_QUESTIONS = [
       { key: "A", text: "True" },
       { key: "B", text: "False" },
     ],
-    correct: "B",
+    correct: "A",
   },
   {
     id: 3,
@@ -60,16 +60,16 @@ const QUIZ_QUESTIONS = [
     topic: "C Operators",
     question: "What are the expected outputs for the following code?",
     code:
-    `#include <stdio.h>
+`#include <stdio.h>
 
-    int main() {
-        int counting_num = 5;
-        printf("Post-increment: %d\\n", counting_num++);
-        printf("Pre-increment: %d\\n", ++counting_num);
-        printf("Post-decrement: %d\\n", counting_num--);
-        printf("Pre-decrement: %d\\n", --counting_num);
-        return 0;
-    }`,
+int main() {
+    int counting_num = 5;
+    printf("Post-increment: %d\\n", counting_num++);
+    printf("Pre-increment: %d\\n", ++counting_num);
+    printf("Post-decrement: %d\\n", counting_num--);
+    printf("Pre-decrement: %d\\n", --counting_num);
+    return 0;
+}`,
     options: [
       { key: "A", text: "Post-increment: 5\nPre-increment: 7\nPost-decrement: 7\nPre-decrement: 5" },
       { key: "B", text: "Post-increment: 6\nPre-increment: 6\nPost-decrement: 4\nPre-decrement: 4" },
@@ -87,14 +87,14 @@ const QUIZ_QUESTIONS = [
       "without a sequence point in between, which is technically undefined behavior in C — most " +
       "compilers, including GCC, produce the result below, but don't rely on this pattern in real code.)",
     code:
-    `#include <stdio.h>
+`#include <stdio.h>
 
-    int main() {
-        int counting_num = 5;
-        int result = ++counting_num + counting_num++ - --counting_num;
-        printf("The result is: %d\\n", result);
-        return 0;
-    }`,
+int main() {
+    int counting_num = 5;
+    int result = ++counting_num + counting_num++ - --counting_num;
+    printf("The result is: %d\\n", result);
+    return 0;
+}`,
     options: [
       { key: "A", text: "The result is 8" },
       { key: "B", text: "The result is 9" },
@@ -109,24 +109,24 @@ const QUIZ_QUESTIONS = [
     topic: "Control Flow",
     question: "What is the expected output here? (switch statement, no break statements)",
     code:
-    `#include <stdio.h>
+`#include <stdio.h>
 
-    int main() {
-        int day = 2;
-        switch (day) {
-            case 1:
-                printf("First day\\n");
-            case 2:
-                printf("Second day\\n");
-            case 3:
-                printf("Third day\\n");
-            case 4:
-                printf("Fourth day\\n");
-            default:
-                printf("Invalid day\\n");
-        }
-        return 0;
-    }`,
+int main() {
+    int day = 2;
+    switch (day) {
+        case 1:
+            printf("First day\\n");
+        case 2:
+            printf("Second day\\n");
+        case 3:
+            printf("Third day\\n");
+        case 4:
+            printf("Fourth day\\n");
+        default:
+            printf("Invalid day\\n");
+    }
+    return 0;
+}`,
     options: [
       { key: "A", text: "Second day" },
       { key: "B", text: "Second day\nThird day\nFourth day" },
@@ -141,28 +141,28 @@ const QUIZ_QUESTIONS = [
     topic: "Control Flow",
     question: "What is the expected output here? (same as above, but with break statements)",
     code:
-    `#include <stdio.h>
+`#include <stdio.h>
 
-    int main() {
-        int day = 1;
-        switch (day) {
-            case 1:
-                printf("First day\\n");
-                break;
-            case 2:
-                printf("Second day\\n");
-                break;
-            case 3:
-                printf("Third day\\n");
-                break;
-            case 4:
-                printf("Fourth day\\n");
-                break;
-            default:
-                printf("Invalid day\\n");
-        }
-        return 0;
-    }`,
+int main() {
+    int day = 1;
+    switch (day) {
+        case 1:
+            printf("First day\\n");
+            break;
+        case 2:
+            printf("Second day\\n");
+            break;
+        case 3:
+            printf("Third day\\n");
+            break;
+        case 4:
+            printf("Fourth day\\n");
+            break;
+        default:
+            printf("Invalid day\\n");
+    }
+    return 0;
+}`,
     options: [
       { key: "A", text: "First day\nSecond day\nThird day\nFourth day\nInvalid day" },
       { key: "B", text: "First day" },
@@ -203,14 +203,14 @@ const QUIZ_QUESTIONS = [
     topic: "Arrays & Memory",
     question: "What is the expected output for the following code?",
     code:
-    `#include <stdio.h>
+`#include <stdio.h>
 
-    int main() {
-        int digits[] = { 9, 26, 51, 12, 145, 78, 95 };
-        printf("Size of the digits: %zu bytes\\n", sizeof(digits));
-        printf("Size of an element: %zu bytes\\n", sizeof(digits[3]));
-        return 0;
-    }`,
+int main() {
+    int digits[] = { 9, 26, 51, 12, 145, 78, 95 };
+    printf("Size of the digits: %zu bytes\\n", sizeof(digits));
+    printf("Size of an element: %zu bytes\\n", sizeof(digits[3]));
+    return 0;
+}`,
     options: [
       { key: "A", text: "Size of the entire array: 28 bytes\nSize of an element: 4 bytes" },
       { key: "B", text: "Size of the entire array: 7 bytes\nSize of an element: 1 bytes" },
@@ -240,18 +240,18 @@ const QUIZ_QUESTIONS = [
     topic: "Function Parameters",
     question: "What will be the output of the following code?",
     code:
-    `#include <stdio.h>
+`#include <stdio.h>
 
-    void calculating_numbers(int first_value, int second_value) {
-        printf("%d", first_value - second_value);
-    }
+void calculating_numbers(int first_value, int second_value) {
+    printf("%d", first_value - second_value);
+}
 
-    int main() {
-        int first_value = 30;
-        int second_value = 9;
-        calculating_numbers(second_value, first_value);
-        return 0;
-    }`,
+int main() {
+    int first_value = 30;
+    int second_value = 9;
+    calculating_numbers(second_value, first_value);
+    return 0;
+}`,
     options: [
       { key: "A", text: "21" },
       { key: "B", text: "-21" },
@@ -267,15 +267,15 @@ const QUIZ_QUESTIONS = [
     topic: "Pointers",
     question: "What is the output of the following code?",
     code:
-    `#include <stdio.h>
+`#include <stdio.h>
 
-    int main() {
-        int array[] = { 678, 88, 94, 80, 13, 33 };
-        int* pointer = array;
-        pointer = pointer + 3;
-        printf("%d\\n", *(pointer - 2));
-        return 0;
-    }`,
+int main() {
+    int array[] = { 678, 88, 94, 80, 13, 33 };
+    int* pointer = array;
+    pointer = pointer + 3;
+    printf("%d\\n", *(pointer - 2));
+    return 0;
+}`,
     options: [
       { key: "A", text: "678" },
       { key: "B", text: "94" },
