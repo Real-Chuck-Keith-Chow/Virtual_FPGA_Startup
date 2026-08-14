@@ -608,3 +608,26 @@ table.problem-table { width: 100%; border-collapse: collapse; }
   margin-left: 8px;
 }
 .quiz-retry:hover { color: var(--accent-strong); }
+
+.quiz-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0 48px;
+}
+.quiz-page-btn {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 8px 13px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-elevated-2);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: border-color 0.12s ease, background 0.12s ease, color 0.12s ease;
+}
+.quiz-page-btn:hover:not(:disabled):not(.active) { border-color: var(--accent); color: var(--text-primary); }
+.quiz-page-btn.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.quiz-page-btn:disabled { opacity: 0.35; cursor: not-allowed; }

@@ -1,18 +1,24 @@
 // Builds the quiz page from QUIZ_QUESTIONS (see quiz-data.js) and handles
-// answer selection, scoring, and per-question retry.
+// answer selection, scoring, per-question retry, and pagination.
 document.addEventListener("DOMContentLoaded", () => {
   const listEl = document.getElementById("quiz-list");
   const summaryEl = document.getElementById("quiz-summary");
+  const paginationEl = document.getElementById("quiz-pagination");
   const results = {}; // question id -> true (correct) | false (incorrect)
+
+  const QUESTIONS_PER_PAGE = 3;
+  const totalPages = Math.max(1, Math.ceil(QUIZ_QUESTIONS.length / QUESTIONS_PER_PAGE));
+  let currentPage = 0; // 0-indexed
 
   function updateSummary() {
     const total = QUIZ_QUESTIONS.length;
     const done = Object.keys(results).length;
     const correct = Object.values(results).filter(Boolean).length;
-    summaryEl.textContent =
+    const scoreText =
       done === 0
         ? `${total} question${total === 1 ? "" : "s"}`
         : `${correct}/${done} correct so far · ${total - done} left`;
+    summaryEl.textContent = `${scoreText} · Page ${currentPage + 1} of ${totalPages}`;
   }
 
   function renderQuestion(q) {
@@ -106,6 +112,51 @@ document.addEventListener("DOMContentLoaded", () => {
     updateSummary();
   }
 
-  QUIZ_QUESTIONS.forEach((q) => listEl.appendChild(renderQuestion(q)));
-  updateSummary();
+  function showPage(page, { scroll = true } = {}) {
+    currentPage = page;
+    listEl.querySelectorAll(".quiz-card").forEach((card) => {
+      card.style.display = Number(card.dataset.page) === page ? "" : "none";
+    });
+    renderPagination();
+    updateSummary();
+    if (scroll) listEl.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function renderPagination() {
+    paginationEl.innerHTML = "";
+    if (totalPages <= 1) return;
+
+    const prevBtn = document.createElement("button");
+    prevBtn.type = "button";
+    prevBtn.className = "quiz-page-btn";
+    prevBtn.textContent = "← Prev";
+    prevBtn.disabled = currentPage === 0;
+    prevBtn.addEventListener("click", () => showPage(currentPage - 1));
+    paginationEl.appendChild(prevBtn);
+
+    for (let i = 0; i < totalPages; i++) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "quiz-page-btn" + (i === currentPage ? " active" : "");
+      btn.textContent = String(i + 1);
+      btn.addEventListener("click", () => showPage(i));
+      paginationEl.appendChild(btn);
+    }
+
+    const nextBtn = document.createElement("button");
+    nextBtn.type = "button";
+    nextBtn.className = "quiz-page-btn";
+    nextBtn.textContent = "Next →";
+    nextBtn.disabled = currentPage === totalPages - 1;
+    nextBtn.addEventListener("click", () => showPage(currentPage + 1));
+    paginationEl.appendChild(nextBtn);
+  }
+
+  QUIZ_QUESTIONS.forEach((q, i) => {
+    const card = renderQuestion(q);
+    card.dataset.page = Math.floor(i / QUESTIONS_PER_PAGE);
+    listEl.appendChild(card);
+  });
+
+  showPage(0, { scroll: false });
 });
