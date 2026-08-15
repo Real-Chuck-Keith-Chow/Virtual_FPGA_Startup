@@ -19,6 +19,11 @@
 //
 // `code` is optional — omit it entirely for plain conceptual questions.
 //
+// SELECT-ALL-THAT-APPLY QUESTIONS: make `correct` an ARRAY of keys instead of
+// a single string, e.g. correct: ["A", "C", "D"]. quiz.js detects this
+// automatically and renders checkboxes + a "Check answer" button instead of
+// answer-on-click. Everything else about the object shape stays the same.
+//
 const QUIZ_QUESTIONS = [
   {
     id: 1,
@@ -287,5 +292,20 @@ int main() {
       { key: "H", text: "Undefined behaviour" },
     ],
     correct: "F",
+  },
+  {
+    id: 14,
+    topic: "Embedded Fundamentals",
+    question: "Which of the following are embedded systems? Select all that apply.",
+    options: [
+      { key: "A", text: "Digital multimeter" },
+      { key: "B", text: "Desktop computer running Windows" },
+      { key: "C", text: "Microwave oven" },
+      { key: "D", text: "Smart thermostat" },
+      { key: "E", text: "A microcontroller with custom firmware controlling a motor" },
+      { key: "F", text: "A web server running on a cloud VM" },
+      { key: "G", text: "A PC running a single-purpose program" },
+    ],
+    correct: ["A", "C", "D", "E"],
   },
 ];

@@ -22,6 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderQuestion(q) {
+    const isMulti = Array.isArray(q.correct);
+
     const card = document.createElement("div");
     card.className = "panel quiz-card";
     card.dataset.answered = "false";
@@ -34,11 +36,30 @@ document.addEventListener("DOMContentLoaded", () => {
     questionText.className = "quiz-question-text";
     questionText.textContent = q.question;
 
+    card.appendChild(topic);
+    card.appendChild(questionText);
+
+    if (q.code) {
+      const codeEl = document.createElement("pre");
+      codeEl.className = "quiz-code";
+      codeEl.textContent = q.code;
+      card.appendChild(codeEl);
+    }
+
+    if (isMulti) {
+      const hint = document.createElement("p");
+      hint.className = "quiz-hint";
+      hint.textContent = "Select all that apply, then check your answer.";
+      card.appendChild(hint);
+    }
+
     const optionsEl = document.createElement("div");
     optionsEl.className = "quiz-options";
 
     const feedbackEl = document.createElement("div");
     feedbackEl.className = "quiz-feedback";
+
+    const selected = new Set(); // only used for multi-select questions
 
     q.options.forEach((opt) => {
       const btn = document.createElement("button");
@@ -47,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.dataset.key = opt.key;
 
       const keyEl = document.createElement("span");
-      keyEl.className = "quiz-option-key";
+      keyEl.className = "quiz-option-key" + (isMulti ? " checkbox" : "");
       keyEl.textContent = opt.key;
 
       const textEl = document.createElement("span");
@@ -56,19 +77,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
       btn.appendChild(keyEl);
       btn.appendChild(textEl);
-      btn.addEventListener("click", () => selectAnswer(q, opt.key, card, optionsEl, feedbackEl));
+
+      if (isMulti) {
+        btn.addEventListener("click", () => {
+          if (card.dataset.answered === "true") return;
+          btn.classList.toggle("selected");
+          if (btn.classList.contains("selected")) selected.add(opt.key);
+          else selected.delete(opt.key);
+        });
+      } else {
+        btn.addEventListener("click", () => selectAnswer(q, opt.key, card, optionsEl, feedbackEl));
+      }
+
       optionsEl.appendChild(btn);
     });
 
-    card.appendChild(topic);
-    card.appendChild(questionText);
-    if (q.code) {
-      const codeEl = document.createElement("pre");
-      codeEl.className = "quiz-code";
-      codeEl.textContent = q.code;
-      card.appendChild(codeEl);
-    }
     card.appendChild(optionsEl);
+
+    if (isMulti) {
+      const checkBtn = document.createElement("button");
+      checkBtn.type = "button";
+      checkBtn.className = "btn btn-primary btn-sm quiz-check-btn";
+      checkBtn.textContent = "Check answer";
+      checkBtn.addEventListener("click", () =>
+        checkMultiAnswer(q, selected, card, optionsEl, feedbackEl, checkBtn)
+      );
+      card.appendChild(checkBtn);
+    }
+
     card.appendChild(feedbackEl);
     return card;
   }
@@ -109,6 +145,56 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.classList.remove("correct", "incorrect");
     });
     feedbackEl.innerHTML = "";
+    updateSummary();
+  }
+
+  function checkMultiAnswer(q, selected, card, optionsEl, feedbackEl, checkBtn) {
+    if (card.dataset.answered === "true") return;
+    card.dataset.answered = "true";
+
+    const correctSet = new Set(q.correct);
+    const isCorrect =
+      selected.size === correctSet.size && [...selected].every((k) => correctSet.has(k));
+    results[q.id] = isCorrect;
+
+    optionsEl.querySelectorAll(".quiz-option").forEach((btn) => {
+      const key = btn.dataset.key;
+      const wasChosen = selected.has(key);
+      const isRight = correctSet.has(key);
+      btn.disabled = true;
+      btn.classList.remove("selected");
+      if (wasChosen && isRight) btn.classList.add("correct");
+      else if (wasChosen && !isRight) btn.classList.add("incorrect");
+      else if (!wasChosen && isRight) btn.classList.add("missed");
+    });
+
+    checkBtn.style.display = "none";
+
+    feedbackEl.innerHTML = isCorrect
+      ? '<span class="ok-text">Correct.</span>'
+      : `<span class="fail-text">Not quite — correct answers are ${[...correctSet].sort().join(", ")}.</span>` +
+        '<a href="#" class="quiz-retry">Try again</a>';
+
+    if (!isCorrect) {
+      feedbackEl.querySelector(".quiz-retry").addEventListener("click", (e) => {
+        e.preventDefault();
+        resetMultiQuestion(q, selected, card, optionsEl, feedbackEl, checkBtn);
+      });
+    }
+
+    updateSummary();
+  }
+
+  function resetMultiQuestion(q, selected, card, optionsEl, feedbackEl, checkBtn) {
+    card.dataset.answered = "false";
+    delete results[q.id];
+    selected.clear();
+    optionsEl.querySelectorAll(".quiz-option").forEach((btn) => {
+      btn.disabled = false;
+      btn.classList.remove("correct", "incorrect", "missed", "selected");
+    });
+    feedbackEl.innerHTML = "";
+    checkBtn.style.display = "";
     updateSummary();
   }
 
