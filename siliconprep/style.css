@@ -644,3 +644,21 @@ table.problem-table { width: 100%; border-collapse: collapse; }
 .quiz-page-btn:hover:not(:disabled):not(.active) { border-color: var(--accent); color: var(--text-primary); }
 .quiz-page-btn.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 .quiz-page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.quiz-feedback .muted-text { color: var(--text-muted); }
+
+.exercise-blank {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  color: var(--text-primary);
+  padding: 1px 6px;
+  text-align: center;
+  outline: none;
+}
+.exercise-blank:focus { border-color: var(--accent-strong); box-shadow: 0 0 0 2px rgba(242, 169, 78, 0.2); }
+.exercise-blank.right { border-color: var(--signal-green); background: rgba(95, 214, 140, 0.12); color: var(--signal-green); }
+.exercise-blank.wrong { border-color: var(--signal-red); background: rgba(226, 87, 76, 0.12); }
+.exercise-actions { display: flex; gap: 10px; margin: 16px 0 4px; }
